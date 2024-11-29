@@ -1,0 +1,11 @@
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore Python bytecode cache
+__pycache__/
+
+# Ignore IDE-specific files (e.g., JetBrains/IntelliJ IDEA, PyCharm)
+.idea/
+
+# Ignore Python virtual environments
+venv/
