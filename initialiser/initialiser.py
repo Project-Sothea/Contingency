@@ -2,33 +2,37 @@ import os
 import pandas as pd
 from openpyxl.reader.excel import load_workbook
 
-from columns import required_columns
-from columns import range_columns
+import columns
+from columns import required_columns, Types
+from columns import DataType
 from openpyxl.worksheet.datavalidation import DataValidation
 
 class Initialiser:
-    def __init__(self, csv_file_path):
+    def __init__(self, patientdata_file_path, types_file_path):
         """
         Initialize the Validator object with a CSV file path.
 
         Args:
             csv_file_path (str): The path to the CSV file to be validated.
         """
-        self.csv_file_path: str = csv_file_path
+        self.csv_file_path: str = patientdata_file_path
+        self.types_file_path: str = types_file_path
         self.df: pd.DataFrame = None
         self.wb = None
         self.ws = None
         self.wb_name = "DataSheet.xlsx"
         self.ws_name = "Sheet1"
-
-       # Initialise Types
-
+        self.types: columns.Types
 
     def readCSV(self):
         """
         Read the CSV file into a Pandas DataFrame, and initialise the Excel workbook and worksheet.
         """
         try:
+            # Initialise Types
+            self.types = Types(self.types_file_path)
+            print(f"Types '{self.types_file_path}' read successfully!")
+
             # Read the CSV file into a DataFrame
             self.df = pd.read_csv(self.csv_file_path)
             print(f"CSV file '{self.csv_file_path}' read successfully!")
@@ -48,7 +52,7 @@ class Initialiser:
             self.ws = self.wb[self.ws_name]
 
         except Exception as e:
-            print(f"Error reading CSV file: {e}")
+            print(f"Error reading CSV file / Initialising Types: {e}")
 
     def applyValidationRules(self):
         """
@@ -58,32 +62,16 @@ class Initialiser:
         # Custom DV Rule - Range [0, 6]
 
         try:
-            # Add the dv rules to the worksheet
-            self.ws.add_data_validation(numeric_dv)
-            self.ws.add_data_validation(integer_dv)
-            self.ws.add_data_validation(date_dv)
-            self.ws.add_data_validation(boolean_dv)
-            self.ws.add_data_validation(gender_dv)
+            # Add the dv rules listed in DataType enums to the worksheet
+            for dt in DataType:
+                if dt.validation != None:
+                    self.ws.add_data_validation(dt.validation)
 
-            # Apply Numeric DV Rule to columns
-            numeric_dv.add(range_columns["vs_temperature"])
-
-            # Apply Integer DV Rule to columns
-            integer_dv.add(range_columns["id"])
-            integer_dv.add(range_columns["vid"])
-            integer_dv.add(range_columns["a_age"])
-
-            # Apply Date DV Rule to columns
-            date_dv.add(range_columns["a_reg_date"])
-            date_dv.add(range_columns["a_dob"])
-            date_dv.add(range_columns["a_last_menstrual_period"])
-
-            # Apply Boolean DV Rule to columns
-            boolean_dv.add(range_columns["a_pregnant"])
-            boolean_dv.add(range_columns["a_sent_to_id"])
-
-            # Apply Gender DV Rule to columns
-            gender_dv.add(range_columns["a_gender"])
+            # for each category in types, for each field in the category, apply the validation rule to its datasheet range
+            for category in self.types.categories:
+                for field in category.fields:
+                    if field.datatype.validation != None:
+                        field.datatype.validation.add(field.datasheet_range)
 
             self.wb.save(self.wb_name)
             print("Validation rules applied and saved successfully!")
@@ -91,10 +79,15 @@ class Initialiser:
         except Exception as e:
             print(f"Error applying validation rules: {e}")
 
+    def applyFormatting(self):
+        pass
 
-# Path to patient data csv file
-path = "patientdata.csv"  # Replace with your directory path
 
-validator = Initialiser(path)
-validator.readCSV()
-validator.applyValidationRules()
+if __name__ == "__main__":
+    # Path to patient data csv file
+    patientdata_file_path = "patientdata.csv"  # Replace with your directory path
+    types_file_path = "types.csv"
+
+    validator = Initialiser(patientdata_file_path, types_file_path)
+    validator.readCSV()
+    validator.applyValidationRules()

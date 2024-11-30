@@ -26,3 +26,10 @@ Takes a successfully merged Data Sheet and imports it into the application datab
     1. Collate all the Data Sheets from the various stations. (Manually / Network File Sharing System)
     2. Merge the Data Sheets into a single Data Sheet using the Merger script.
     3. Import the merged Data Sheet into the application database using the Importer script.
+
+### Files
+- patientdata.csv
+
+- DataSheet.xlsx
+
+- types.csv

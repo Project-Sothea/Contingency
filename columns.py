@@ -1,5 +1,8 @@
 # Maps CSV cols to Data Sheet cols
 from enum import Enum
+from typing import List, Optional
+
+import openpyxl.worksheet.datavalidation
 from openpyxl.worksheet.datavalidation import DataValidation
 import csv
 
@@ -312,7 +315,7 @@ range_columns = {
 #
 
 class DataType(Enum):
-    def __new__(cls, sql_type, validation=None):
+    def __new__(cls, sql_type, validation: Optional[DataValidation] = None):
         obj = object.__new__(cls)
         obj._value_ = sql_type
         obj.validation = validation
@@ -383,14 +386,15 @@ class FieldDescriptor:
     """
 
     def __init__(self, sql_name: str, go_name: str, json_name: str, datasheet_name: str, datatype: DataType,
-                 required: bool = False, datasheet_range: str = None):
-        self.required = required  # Whether the field is required
-        self.sql_name = sql_name  # SQL column name
-        self.go_name = go_name  # Go struct field name
-        self.json_name = json_name  # JSON field name
-        self.datasheet_name = datasheet_name  # DataSheet column name
-        self.datatype = datatype  # Data type of the field (Loosely follows SQL type)
-        self.datasheet_range = datasheet_range  # Range of the column in the datasheet
+                 colour: str, required: bool = False, datasheet_range: str = None):
+        self.required: bool = required                  # Whether the field is required
+        self.sql_name: str = sql_name                   # SQL column name
+        self.go_name: str = go_name                     # Go struct field name
+        self.json_name: str = json_name                 # JSON field name
+        self.datasheet_name: str = datasheet_name       # DataSheet column name
+        self.datatype: DataType = datatype              # Data type of the field (Loosely follows SQL type)
+        self.datasheet_range: str = datasheet_range     # Range of the column in the datasheet
+        self.colour: str = colour                       # Column colour
 
     def __repr__(self):
         return self.sql_name
@@ -402,8 +406,8 @@ class CategoryDescriptor:
     """
 
     def __init__(self, name: str, fields: list):
-        self.name = name
-        self.fields = fields  # fields is expected to be a list of Field objects
+        self.name: str = name
+        self.fields: List[FieldDescriptor] = fields  # fields is expected to be a list of Field objects
 
     def __repr__(self):
         return self.name
@@ -411,7 +415,7 @@ class CategoryDescriptor:
 
 class Types:
     def __init__(self, csv_path: str):
-        self.categories = []  # An array of CategoryDescriptor objects
+        self.categories: List[CategoryDescriptor] = []  # An array of CategoryDescriptor objects
         self._load_from_csv(csv_path)
 
     def _load_from_csv(self, csv_path: str):
@@ -430,6 +434,8 @@ class Types:
                 datasheet_name = row["Datasheet Name"]
                 datatype = row["Data Type"]
                 required = row["Required"].strip().upper() == "TRUE"
+                datasheet_range = row["Datasheet Range"]
+                colour = row["Colour"]
 
                 # Create a FieldDescriptor
                 field = FieldDescriptor(
@@ -438,7 +444,9 @@ class Types:
                     json_name=json_name,
                     datasheet_name=datasheet_name,
                     datatype=DataType[datatype],
-                    required=required
+                    required=required,
+                    datasheet_range=datasheet_range,
+                    colour=colour
                 )
 
                 # Add the field to the appropriate category
@@ -456,7 +464,7 @@ class Types:
 
 
 if __name__ == "__main__":
-    types = Types("types.csv")
+    types = Types("initialiser/types.csv")
 
     # Print header with increased padding
     print(f"{'Category':<25} {'Field':<30} {'DataType':<25} {'Required':<10}")
