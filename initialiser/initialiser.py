@@ -21,9 +21,12 @@ class Initialiser:
         self.wb_name = "DataSheet.xlsx"
         self.ws_name = "Sheet1"
 
+       # Initialise Types
+
+
     def readCSV(self):
         """
-        Read the CSV file into a Pandas DataFrame
+        Read the CSV file into a Pandas DataFrame, and initialise the Excel workbook and worksheet.
         """
         try:
             # Read the CSV file into a DataFrame
@@ -51,32 +54,6 @@ class Initialiser:
         """
         Apply data validation rules to an Excel workbook.
         """
-        # DV Rule - NUMERIC(5, 1)
-        numeric_dv = DataValidation(type="decimal", operator="between", formula1="-9999.9", formula2="9999.9",
-                                    showErrorMessage=True)
-        numeric_dv.error = "Entry must be a number between -9999.9 and 9999.9"
-        numeric_dv.errorTitle = "Invalid Entry"
-
-        # DV Rule - INTEGER
-        integer_dv = DataValidation(type="whole", operator="between", formula1="-9999", formula2="9999",
-                                    showErrorMessage=True)
-        integer_dv.error = "Entry must be a whole number between -9999 and 9999"
-        integer_dv.errorTitle = "Invalid Entry"
-
-        # DV Rule - DATE
-        date_dv = DataValidation(type="date", showErrorMessage=True)
-        date_dv.error = "Entry must be a valid date"
-        date_dv.errorTitle = "Invalid Entry"
-
-        # DV Rule - BOOLEAN
-        boolean_dv = DataValidation(type="list", formula1='"TRUE,FALSE"', showErrorMessage=True)
-        boolean_dv.error = "Entry must be either 'TRUE' or 'FALSE'"
-        boolean_dv.errorTitle = "Invalid Entry"
-
-        # DV Rule - VARCHAR(1) M/F
-        gender_dv = DataValidation(type="list", formula1='"M,F"', showErrorMessage=True)
-        gender_dv.error = "Entry must be a either M/F"
-        gender_dv.errorTitle = "Invalid Entry"
         # Custom DV Rule - Range [0, 7]
         # Custom DV Rule - Range [0, 6]
 
