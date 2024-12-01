@@ -9,3 +9,5 @@ __pycache__/
 
 # Ignore Python virtual environments
 venv/
+
+/uploads/*.xlsx
