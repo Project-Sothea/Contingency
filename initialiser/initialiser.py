@@ -1,6 +1,7 @@
 import os
 
 import pandas as pd
+from openpyxl.formatting.rule import FormulaRule
 from openpyxl.reader.excel import load_workbook
 from openpyxl.styles import PatternFill, Side, Border, Alignment
 
@@ -8,6 +9,10 @@ import columns
 from columns import required_columns, Types
 from columns import DataType
 
+
+"""
+Initialise an Excel workbook from the patientdata csv file with data validation rules, formatting, and dropdowns.
+"""
 class Initialiser:
     def __init__(self, patientdata_file_path, types_file_path):
         """
@@ -58,6 +63,7 @@ class Initialiser:
     def applyValidationRules(self):
         """
         Apply data validation rules to an Excel workbook.
+        Also adds "Example" Row to workbook
         """
         # Custom DV Rule - Range [0, 7]
         # Custom DV Rule - Range [0, 6]
@@ -83,12 +89,11 @@ class Initialiser:
     def applyFormatting(self):
         """
         Apply formatting rules to an Excel workbook.
-        - Applies a border to all cells
-        - Colours cells according to their category
+        - Applies a border to first 500 rows
+        - Colour first row of cells according to their category
+        - Pin first row, and first 3 columns of cells
         - Resizes column width to fit the content.
         - First Row: Triples height, centres text
-        - Pins the first 3 columns
-        - Adds dropdowns if necessary
         """
 
         # Apply border to all cells
@@ -99,24 +104,23 @@ class Initialiser:
             bottom=Side(border_style="thin", color="000000")
         )
 
-        for row in self.ws.iter_rows(min_row=1, max_row=self.ws.max_row, min_col=1, max_col=self.ws.max_column):
+        for row in self.ws.iter_rows(min_row=1, max_row=500, min_col=1, max_col=self.ws.max_column):
             for cell in row:
                 cell.border = border_style
         print("Borders applied successfully!")
 
-        # Colours cells according to their category
+        # Colours first row of cells according to their category
         for category in self.types.categories:
             for field in category.fields:
                 custom_fill = PatternFill(start_color=field.colour, end_color=field.colour, fill_type="solid")
                 start_cell, end_cell = field.datasheet_range.split(":")
-                start_column = ''.join(filter(str.isalpha, start_cell))
-                range_cells = self.ws[f"{start_cell}:{start_column}{self.ws.max_row}"]
-                for row in range_cells:
-                    for cell in row:
-                        cell.fill = custom_fill
+                self.ws[start_cell].fill = custom_fill
         print("Cell colours applied successfully!")
 
-        # Resizes column width and height to fit the content
+        # Pin first row, and first 3 columns of cells
+        self.ws.freeze_panes = "D2"  # Freeze everything above row 2 and to the left of column D
+
+        # First Row: Triples height, centres text
         for col in self.ws.columns:
             max_length = 0
             column = col[0].column_letter
@@ -126,16 +130,52 @@ class Initialiser:
                         max_length = len(cell.value)
                 except:
                     pass
-            adjusted_width = (max_length + 2)
+            adjusted_width = min(35, max_length + 2)
             self.ws.column_dimensions[column].width = adjusted_width
 
-            # Apply text wrapping to all cells in the first row
-            for cell in self.ws[1]:  # Loop through each cell in the first row
-                cell.alignment = Alignment(wrap_text=True, horizontal="center", vertical="center")
+        self.ws.row_dimensions[1].height = 60
+        for cell in self.ws[1]:  # Loop through each cell in the first row
+            cell.alignment = Alignment(wrap_text=True, horizontal="center", vertical="center")
 
 
         self.wb.save(self.wb_name)
         print("Formatting applied and saved successfully!")
+
+    def applyDropdowns(self):
+        """
+        Apply dropdowns to an Excel workbook.
+        """
+        pass
+
+    def applyConditionalFormatting(self):
+        """
+        Apply conditional formatting to highlight empty required cells in rows where
+        any cell in the same category is filled.
+        """
+        red_fill = PatternFill(start_color="ea9999", end_color="ea9999",
+                               fill_type="solid")  # Red fill for required fields
+
+        for category in self.types.categories:  # Iterate through each category
+            # Collect column letters for required fields in this category
+            required_columns = [
+                ''.join(filter(str.isalpha, f.datasheet_range.split(":")[0]))
+                for f in category.fields if f.required  # Only include required fields
+            ]
+            category_columns = [
+                ''.join(filter(str.isalpha, f.datasheet_range.split(":")[0]))
+                for f in category.fields
+            ]
+
+            for row_number in range(2, 201): # start and end rows
+                filled_check = ", ".join([f'ISBLANK(${col}{row_number})' for col in required_columns])
+                formula = f'=OR({filled_check})'
+                rule = FormulaRule(formula=[formula], fill=red_fill)
+
+                for col in category_columns:
+                    self.ws.conditional_formatting.add(f"{col}{row_number}", rule)
+
+        self.wb.save(self.wb_name)
+        print("Conditional formatting applied successfully!")
 
 
 if __name__ == "__main__":
@@ -153,3 +193,4 @@ if __name__ == "__main__":
     initialiser.readCSV()
     initialiser.applyValidationRules()
     initialiser.applyFormatting()
+    initialiser.applyConditionalFormatting()

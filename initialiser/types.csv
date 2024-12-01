@@ -13,7 +13,7 @@ Admin,Admin,TRUE,id,ID,id,Registration ID,INTEGER,A1:A1048576,,Auto-incrementing
 ,Admin,TRUE,contact_no,ContactNo,contactNo,Contact No.,TEXT,L1:L1048576,,Patient contact number,ea9999
 ,Admin,TRUE,pregnant,Pregnant,pregnant,Pregnant?,BOOLEAN,M1:M1048576,,Boolean indicating if patient is pregnant.,ea9999
 ,Admin,FALSE,last_menstrual_period,LastMenstrualPeriod,lastMenstrualPeriod,"If N or unsure, Last Menstrual Period",DATE,N1:N1048576,,Date of last menstrual period.,ea9999
-,Admin,TRUE,drug_allergies,DrugAllergies,drugAllerg,Drug Allergies,TEXT,O1:O1048576,,Patient drug allergies,ea9999
+,Admin,FALSE,drug_allergies,DrugAllergies,drugAllerg,Drug Allergies,TEXT,O1:O1048576,,Patient drug allergies,ea9999
 ,Admin,TRUE,sent_to_id,SentToID,sentToId,sent to Infectious Disease?,BOOLEAN,P1:P1048576,,Boolean indicating if patient was sent to infectious diseases station.,ea9999
 ,Admin,FALSE,photo,Photo,photo,Photo,BYTEA,DK1:DK1048576,,"Postgres binary string data type, used to store photo",ea9999
 Past Medical History,PastMedicalHistory,TRUE,tuberculosis,Tuberculosis,tuberculosis,Tuberculosis,BOOLEAN,Q1:Q1048576,,Boolean indicating if patient has tuberculosis,f9cb9c
