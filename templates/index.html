@@ -8,13 +8,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>Upload Datasheet.xlsx File</h1>
+        <h1>Upload Your Datasheet.xlsx File</h1>
         <form id="uploadForm">
             <input type="file" id="file" name="file" accept=".xlsx" required>
             <button type="submit">Upload</button>
         </form>
-        <small>File has to be named exactly: "Datasheet.xlsx" otherwise it won't be accepted!</small>
+        <small>File has to be named exactly: "DataSheet.xlsx" otherwise it won't be accepted!</small>
         <p id="responseMessage"></p>
+
+        <!-- Download link -->
+        <h1>Download Datasheet.xlsx File</h1>
+        <a href="/download-datasheet">
+            <button>Download DataSheet.xlsx</button>
+        </a>
     </div>
 
     <script>

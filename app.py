@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-
+from flask import send_from_directory
 from flask import Flask, render_template, request, redirect, url_for
 import os
 
@@ -14,12 +14,21 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Allowed file extensions
 ALLOWED_EXTENSIONS = {'xlsx'}
 
+# Directory for downloads
+DOWNLOAD_FOLDER = os.path.join(os.getcwd(), 'downloads')
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
+
+
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    # Check if the file extension is allowed and if the name matches "DataSheet.xlsx"
+    return ('.' in filename and filename.rsplit('.', 1)[
+        1].lower() in ALLOWED_EXTENSIONS and filename == "DataSheet.xlsx")
+
 
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -42,6 +51,13 @@ def upload_file():
         return f"File uploaded successfully: {file.filename} at {upload_time}", 200
     else:
         return "Invalid file type. Only .xlsx files are allowed.", 400
+
+
+@app.route('/download-datasheet', methods=['GET'])
+def download_datasheet():
+    filename = "DataSheet.xlsx"
+    return send_from_directory(DOWNLOAD_FOLDER, filename, as_attachment=True)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8000)
