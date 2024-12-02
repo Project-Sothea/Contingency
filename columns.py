@@ -75,16 +75,17 @@ class FieldDescriptor:
     Describes a field
     """
 
-    def __init__(self, sql_name: str, go_name: str, json_name: str, datasheet_name: str, datatype: DataType,
-                 colour: str, required: bool = False, datasheet_range: str = None):
-        self.required: bool = required                  # Whether the field is required
+    def __init__(self, sql_name: str, go_name: str, json_name: str, datasheet_name: str, csv_name: str,
+                 datatype: DataType, colour: str, required: bool = False, datasheet_range: str = None):
         self.sql_name: str = sql_name                   # SQL column name
         self.go_name: str = go_name                     # Go struct field name
         self.json_name: str = json_name                 # JSON field name
         self.datasheet_name: str = datasheet_name       # DataSheet column name
+        self.csv_name: str = csv_name                   # CSV column name in patientdata.csv
         self.datatype: DataType = datatype              # Data type of the field (Loosely follows SQL type)
-        self.datasheet_range: str = datasheet_range     # Range of the column in the datasheet
         self.colour: str = colour                       # Column colour
+        self.required: bool = required                  # Whether the field is required
+        self.datasheet_range: str = datasheet_range     # Range of the column in the datasheet
 
     def __repr__(self):
         return self.sql_name
@@ -122,6 +123,7 @@ class Types:
                 go_name = row["Go Name"]
                 json_name = row["JSON Name"]
                 datasheet_name = row["Datasheet Name"]
+                csv_name = row["CSV Name"]
                 datatype = row["Data Type"]
                 required = row["Required"].strip().upper() == "TRUE"
                 datasheet_range = row["Datasheet Range"]
@@ -133,6 +135,7 @@ class Types:
                     go_name=go_name,
                     json_name=json_name,
                     datasheet_name=datasheet_name,
+                    csv_name=csv_name,
                     datatype=DataType[datatype],
                     required=required,
                     datasheet_range=datasheet_range,
@@ -154,7 +157,7 @@ class Types:
 
 
 if __name__ == "__main__":
-    types = Types("initialiser/types.csv")
+    types = Types("types.csv")
 
     # Print header with increased padding
     print(f"{'Category':<25} {'Field':<30} {'DataType':<25} {'Required':<10}")

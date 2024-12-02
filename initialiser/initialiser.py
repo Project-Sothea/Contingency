@@ -1,3 +1,4 @@
+import glob
 import os
 
 import pandas as pd
@@ -6,7 +7,7 @@ from openpyxl.reader.excel import load_workbook
 from openpyxl.styles import PatternFill, Side, Border, Alignment
 
 import columns
-from columns import required_columns, Types
+from columns import Types
 from columns import DataType
 
 
@@ -19,9 +20,9 @@ class Initialiser:
         Initialize the Validator object with a CSV file path.
 
         Args:
-            csv_file_path (str): The path to the CSV file to be validated.
+            csv_folder_path (str): The path to the CSV file to be validated.
         """
-        self.csv_file_path: str = patientdata_file_path
+        self.csv_folder_path: str = patientdata_file_path
         self.types_file_path: str = types_file_path
         self.df: pd.DataFrame = None
         self.wb = None
@@ -30,21 +31,54 @@ class Initialiser:
         self.ws_name = "Sheet1"
         self.types: columns.Types
 
+    def initialise(self):
+        """
+        Do preliminary initialisation
+        """
+        self.types = Types(self.types_file_path)
+        print(f"Types '{self.types_file_path}' initialised successfully!")
+
     def readCSV(self):
         """
-        Read the CSV file into a Pandas DataFrame, and initialise the Excel workbook and worksheet.
+        - Finds latest backup CSV in self.csv_folder_path
+        - Reads the CSV file into a pandas dataframe, then tries to rename columns from CSV name -> DataSheet name
+        - From the renamed pandas dataframe, initialises the Excel workbook and worksheet.
         """
         try:
-            # Initialise Types
-            self.types = Types(self.types_file_path)
-            print(f"Types '{self.types_file_path}' read successfully!")
+            file_pattern = os.path.join(self.csv_folder_path, "*_patientdata.csv")
+
+            # Get a list of all matching files
+            files = glob.glob(file_pattern)
+
+            # Ensure there are files to process
+            if not files:
+                raise FileNotFoundError(f"No CSV files found in {self.csv_folder_path} matching pattern {file_pattern}")
+
+            # Extract the timestamp from filenames and sort them
+            files_with_timestamps = []
+            for file in files:
+                filename = os.path.basename(file)
+                # Extract the timestamp portion (e.g., "20241202_214801" from "20241202_214801_patientdata.csv")
+                timestamp_str = filename.split("_patientdata.csv")[0]
+                files_with_timestamps.append((file, timestamp_str))
+
+            # Sort files by timestamp
+            latest_file = max(files_with_timestamps, key=lambda x: x[1])[0]
+
+            print(f"Latest CSV file identified: {latest_file}")
 
             # Read the CSV file into a DataFrame
-            self.df = pd.read_csv(self.csv_file_path)
-            print(f"CSV file '{self.csv_file_path}' read successfully!")
+            self.df = pd.read_csv(latest_file)
+            print(f"CSV file '{latest_file}' read successfully!")
 
-            # try to rename the columns of the DataFrame according to the 'required_columns' mapping
-            self.df.rename(columns=required_columns, inplace=True)
+            # Generate a mapping from csv_name to datasheet_name
+            csv_to_datasheet_map = {}
+            for category in self.types.categories:
+                for field in category.fields:
+                    csv_to_datasheet_map[field.csv_name] = field.datasheet_name
+
+            # try to rename the columns of the DataFrame based on CSV Name -> DataSheet Name mapping
+            self.df.rename(columns=csv_to_datasheet_map, inplace=True)
 
             # Save DataFrame to an Excel file
             self.df.to_excel(self.wb_name, sheet_name=self.ws_name, index=False)
@@ -58,16 +92,14 @@ class Initialiser:
             self.ws = self.wb[self.ws_name]
 
         except Exception as e:
-            print(f"Error reading CSV file / Initialising Types: {e}")
+            print(f"Error reading CSV file: {e}")
 
     def applyValidationRules(self):
         """
-        Apply data validation rules to an Excel workbook.
-        Also adds "Example" Row to workbook
+        - Apply data validation rules to an Excel workbook.
+        - Disable column renaming #TODO
+        - Also adds "Example" Row to workbook #TODO
         """
-        # Custom DV Rule - Range [0, 7]
-        # Custom DV Rule - Range [0, 6]
-
         try:
             # Add the dv rules listed in DataType enums to the worksheet
             for dt in DataType:
@@ -141,12 +173,6 @@ class Initialiser:
         self.wb.save(self.wb_name)
         print("Formatting applied and saved successfully!")
 
-    def applyDropdowns(self):
-        """
-        Apply dropdowns to an Excel workbook.
-        """
-        pass
-
     def applyConditionalFormatting(self):
         """
         Apply conditional formatting to highlight empty required cells in rows where
@@ -180,8 +206,8 @@ class Initialiser:
 
 if __name__ == "__main__":
     # Path to patient data csv file
-    patientdata_file_path = "patientdata.csv"  # Replace with your directory path
-    types_file_path = "types.csv"
+    patientdata_file_path = "../cron/backups"  # Replace with your directory path
+    types_file_path = "../types.csv"
 
     # delete the existing DataSheet.xlsx file
     try:
@@ -190,6 +216,7 @@ if __name__ == "__main__":
         pass
 
     initialiser = Initialiser(patientdata_file_path, types_file_path)
+    initialiser.initialise()
     initialiser.readCSV()
     initialiser.applyValidationRules()
     initialiser.applyFormatting()
