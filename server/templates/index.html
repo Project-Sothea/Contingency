@@ -14,16 +14,35 @@
             <button type="submit">Upload</button>
         </form>
         <small>File has to be named exactly: "DataSheet.xlsx" otherwise it won't be accepted!</small>
-        <p id="responseMessage"></p>
+        <p id="uploadResponseMessage"></p>
 
         <!-- Download link -->
         <h1>Download Datasheet.xlsx File</h1>
         <a href="/download-datasheet">
-            <button>Download DataSheet.xlsx</button>
+            <button id="download-button">Download DataSheet.xlsx</button>
         </a>
+        <p id="downloadResponseMessage"></p>
     </div>
 
     <script>
+        document.getElementById('download-button').addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                const response = await fetch('/download-datasheet');
+
+                const message = await response.text();
+                const responseMessage = document.getElementById('downloadResponseMessage');
+                if (response.ok) {
+                    responseMessage.textContent = message;
+                    responseMessage.style.color = 'green';
+                } else {
+                    responseMessage.textContent = message;
+                    responseMessage.style.color = 'red';
+                }
+            } catch (error) {
+                console.error('Error downloading file:', error);
+            }
+        });
         document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -39,7 +58,7 @@
                 });
 
                 const message = await response.text();
-                const responseMessage = document.getElementById('responseMessage');
+                const responseMessage = document.getElementById('uploadResponseMessage');
                 if (response.ok) {
                     responseMessage.textContent = message;
                     responseMessage.style.color = 'green';

@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from flask import send_from_directory
+from flask import send_from_directory, jsonify
 from flask import Flask, render_template, request, redirect, url_for
 import os
 
@@ -50,12 +50,17 @@ def upload_file():
         upload_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # Human-readable timestamp
         return f"File uploaded successfully: {file.filename} at {upload_time}", 200
     else:
-        return "Invalid file type. Only .xlsx files are allowed.", 400
+        return "Invalid file type. Only DataSheet.xlsx files are allowed.", 400
 
 
 @app.route('/download-datasheet', methods=['GET'])
 def download_datasheet():
     filename = "DataSheet.xlsx"
+    file_path = os.path.join(DOWNLOAD_FOLDER, filename)
+
+    if not os.path.exists(file_path):
+        # Return an error response if the file doesn't exist
+        return f"File is unavailable!", 404
     return send_from_directory(DOWNLOAD_FOLDER, filename, as_attachment=True)
 
 
