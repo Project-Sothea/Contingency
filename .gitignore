@@ -10,5 +10,8 @@ __pycache__/
 # Ignore Python virtual environments
 venv/
 
-/uploads/*.xlsx
-/downloads/*.xlsx
+server/uploads/*.xlsx
+server/downloads/*.xlsx
+
+# Ignore backups
+/cron/backups/*.csv
