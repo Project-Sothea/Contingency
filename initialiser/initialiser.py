@@ -7,12 +7,13 @@ from openpyxl.reader.excel import load_workbook
 from openpyxl.styles import PatternFill, Side, Border, Alignment
 
 import columns
-from columns import Types
 from columns import DataType
-
+from columns import Types
 
 """
 Initialise an Excel workbook from the patientdata csv file with data validation rules, formatting, and dropdowns.
+Takes csv files from patientdata_file_path and types from types_file_path.
+Places generated DataSheet.xlsx in the same directory as the script.
 """
 class Initialiser:
     def __init__(self, patientdata_file_path, types_file_path):
@@ -126,6 +127,7 @@ class Initialiser:
         - Pin first row, and first 3 columns of cells
         - Resizes column width to fit the content.
         - First Row: Triples height, centres text
+        - Bold required fields #TODO
         """
 
         # Apply border to all cells
@@ -146,7 +148,12 @@ class Initialiser:
             for field in category.fields:
                 custom_fill = PatternFill(start_color=field.colour, end_color=field.colour, fill_type="solid")
                 start_cell, end_cell = field.datasheet_range.split(":")
-                self.ws[start_cell].fill = custom_fill
+                # Extract the column letters from start_cell and adjust the row to 1
+                column_letter = ''.join([char for char in start_cell if char.isalpha()])
+                start_cell_adjusted = f"{column_letter}1"
+
+                # Apply the color to the adjusted start cell (now row 1)
+                self.ws[start_cell_adjusted].fill = custom_fill
         print("Cell colours applied successfully!")
 
         # Pin first row, and first 3 columns of cells
@@ -231,6 +238,7 @@ if __name__ == "__main__":
     # Path to patient data csv file
     patientdata_file_path = "../cron/backups"  # Replace with your directory path
     types_file_path = "../types.csv"
+    datasheet_file_path = "../server/downloads"
 
     # delete the existing DataSheet.xlsx file
     try:
