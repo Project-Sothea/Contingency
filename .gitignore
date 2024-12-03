@@ -17,5 +17,9 @@ server/downloads/*.xlsx
 # Ignore Initialiser DataSheet.xlsx files
 /initialiser/DataSheet.xlsx
 
+# Ignore Merger output csv files
+/merger/*.csv
+
 # Ignore cron manual_backups
 /cron/backups/*.csv
+/cron/logfile.log
