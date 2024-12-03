@@ -40,45 +40,45 @@ class Initialiser:
 
     def readCSV(self):
         """
-        - Finds latest backup CSV in self.csv_folder_path
-        - Reads the CSV file into a pandas dataframe, then tries to rename columns from CSV name -> DataSheet name
-        - From the renamed pandas dataframe, initialises the Excel workbook and worksheet.
+        - Tries to find the latest backup CSV in self.csv_folder_path based on a naming convention.
+        - If no matching file is found, defaults to reading any CSV file in the directory.
+        - Reads the CSV file into a pandas DataFrame, renames its columns from CSV name -> DataSheet name,
+          and initializes the Excel workbook and worksheet.
         """
         try:
-            file_pattern = os.path.join(self.csv_folder_path, "*_patientdata.csv")
+            try:
+                # Try to find the latest file matching the naming convention
+                file_pattern = os.path.join(self.csv_folder_path, "*_patientdata.csv")
+                files = glob.glob(file_pattern)
 
-            # Get a list of all matching files
-            files = glob.glob(file_pattern)
+                if not files:
+                    raise FileNotFoundError("No files matching the naming convention found.")
 
-            # Ensure there are files to process
-            if not files:
-                raise FileNotFoundError(f"No CSV files found in {self.csv_folder_path} matching pattern {file_pattern}")
+                # Extract the timestamp from filenames and sort them
+                files_with_timestamps = [
+                    (file, filename.split("_patientdata.csv")[0])
+                    for file in files
+                    for filename in [os.path.basename(file)]
+                ]
+                latest_file = max(files_with_timestamps, key=lambda x: x[1])[0]
+            except Exception:
+                # Fallback: Read any CSV file in the directory
+                print(
+                    "No files matching the naming convention. Falling back to any CSV file in the folder."
+                )
+                all_files = glob.glob(os.path.join(self.csv_folder_path, "*.csv"))
+                if not all_files:
+                    raise FileNotFoundError(f"No CSV files found in {self.csv_folder_path}.")
+                latest_file = max(all_files, key=os.path.getmtime)  # Use the most recent file
 
-            # Extract the timestamp from filenames and sort them
-            files_with_timestamps = []
-            for file in files:
-                filename = os.path.basename(file)
-                # Extract the timestamp portion (e.g., "20241202_214801" from "20241202_214801_patientdata.csv")
-                timestamp_str = filename.split("_patientdata.csv")[0]
-                files_with_timestamps.append((file, timestamp_str))
+            print(f"CSV file identified: {latest_file}")
 
-            # Sort files by timestamp
-            latest_file = max(files_with_timestamps, key=lambda x: x[1])[0]
-
-            print(f"Latest CSV file identified: {latest_file}")
-
-            # Read the CSV file into a DataFrame
+            # Read the identified CSV file into a DataFrame
             self.df = pd.read_csv(latest_file)
             print(f"CSV file '{latest_file}' read successfully!")
 
-            # Generate a mapping from csv_name to datasheet_name
-            csv_to_datasheet_map = {}
-            for category in self.types.categories:
-                for field in category.fields:
-                    csv_to_datasheet_map[field.csv_name] = field.datasheet_name
-
-            # try to rename the columns of the DataFrame based on CSV Name -> DataSheet Name mapping
-            self.df.rename(columns=csv_to_datasheet_map, inplace=True)
+            # Rename columns of self.df from CSV Name to DataSheet Name
+            self.rename_columns()
 
             # Save DataFrame to an Excel file
             self.df.to_excel(self.wb_name, sheet_name=self.ws_name, index=False)
@@ -203,6 +203,29 @@ class Initialiser:
         self.wb.save(self.wb_name)
         print("Conditional formatting applied successfully!")
 
+    def rename_columns(self):
+        """
+        Renames the columns of the existing DataFrame based on a csv_name to datasheet_name mapping.
+
+        Raises:
+            ValueError: If self.types or self.df is not initialized.
+        """
+        # Check if self.types and self.df are initialized
+        if self.types is None:
+            raise ValueError(
+                "The 'types' object is not initialized. Please initialize 'self.types' before renaming columns.")
+        if self.df is None:
+            raise ValueError(
+                "The DataFrame 'self.df' is not initialized. Please load data into 'self.df' before renaming columns.")
+
+        # Generate a mapping from csv_name to datasheet_name
+        csv_to_datasheet_map = {}
+        for category in self.types.categories:
+            for field in category.fields:
+                csv_to_datasheet_map[field.csv_name] = field.datasheet_name
+
+        # Rename the columns of the existing DataFrame
+        self.df.rename(columns=csv_to_datasheet_map, inplace=True)
 
 if __name__ == "__main__":
     # Path to patient data csv file
