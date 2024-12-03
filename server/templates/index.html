@@ -26,16 +26,12 @@
 
     <script>
         document.getElementById('download-button').addEventListener('click', async (e) => {
-            e.preventDefault();
             try {
                 const response = await fetch('/download-datasheet');
 
                 const message = await response.text();
                 const responseMessage = document.getElementById('downloadResponseMessage');
-                if (response.ok) {
-                    responseMessage.textContent = message;
-                    responseMessage.style.color = 'green';
-                } else {
+                if (!response.ok) {
                     responseMessage.textContent = message;
                     responseMessage.style.color = 'red';
                 }

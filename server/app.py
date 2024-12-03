@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime
-from flask import send_from_directory, jsonify
-from flask import Flask, render_template, request, redirect, url_for
+from flask import send_from_directory
+from flask import Flask, render_template, request
 import os
 
 app = Flask(__name__)
