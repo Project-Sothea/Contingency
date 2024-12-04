@@ -1,0 +1,116 @@
+Category,Category Dropdown,Required,SQL Name,Go Name,JSON Name,Datasheet Name,CSV Name,Data Type,Datasheet Range,Metadata,Description,Colour
+Admin,admin,TRUE,id,ID,id,Registration ID,id,INTEGER,A2:A500,,Auto-incrementing with each new patient created,ea9999
+,admin,TRUE,vid,VID,vid,Visit ID,vid,INTEGER,B2:B1048575,,"Auto-incrementing with each new visit created, for each respective patient",ea9999
+,admin,TRUE,family_group,FamilyGroup,familyGroup,Family Group,a_family_group,TEXT,C2:C500,,"Generally a string of the form ""S001"", ""S002A"" identifying the village and family number, not enforced in the db.",ea9999
+,admin,TRUE,reg_date,RegDate,regDate,Date,a_reg_date,DATE,D2:D500,,Date of registration. Set by the doctors.,ea9999
+,admin,TRUE,queue_no,QueueNo,queueNo,Queue number,a_queue_no,TEXT,E2:E500,,"String that can be of the form ""1A"", ""2A"", etc, not enforced",ea9999
+,admin,TRUE,name,Name,name,Name,a_name,TEXT,F2:F500,,Patient Name,ea9999
+,admin,TRUE,khmer_name,KhmerName,khmerName,Khmer name,a_khmer_name,TEXT,G2:G500,,Patient Khmer Name,ea9999
+,admin,FALSE,dob,Dob,dob,DOB,a_dob,DATE,H2:H500,,Patient date of birth,ea9999
+,admin,FALSE,age,Age,age,Age,a_age,INTEGER,I2:I500,,Patient age,ea9999
+,admin,TRUE,gender,Gender,gender,Gender,a_gender,VARCHAR_1,J2:J500,"M,F",Patient gender. Not enforced M or F.,ea9999
+,admin,TRUE,village,Village,village,Village,a_village,TEXT,K2:K500,,Patient village of origin.,ea9999
+,admin,TRUE,contact_no,ContactNo,contactNo,Contact No.,a_contact_no,TEXT,L2:L500,,Patient contact number,ea9999
+,admin,TRUE,pregnant,Pregnant,pregnant,Pregnant?,a_pregnant,BOOLEAN,M2:M500,,Boolean indicating if patient is pregnant.,ea9999
+,admin,FALSE,last_menstrual_period,LastMenstrualPeriod,lastMenstrualPeriod,"If N or unsure, Last Menstrual Period",a_last_menstrual_period,DATE,N2:N500,,Date of last menstrual period.,ea9999
+,admin,FALSE,drug_allergies,DrugAllergies,drugAllerg,Drug Allergies,a_drug_allergies,TEXT,O2:O500,,Patient drug allergies,ea9999
+,admin,TRUE,sent_to_id,SentToID,sentToId,sent to Infectious Disease?,a_sent_to_id,BOOLEAN,P2:P500,,Boolean indicating if patient was sent to infectious diseases station.,ea9999
+,admin,FALSE,photo,Photo,photo,Photo,a_photo,BYTEA,DK2:DK500,,"Postgres binary string data type, used to store photo",ea9999
+Past Medical History,pastmedicalhistory,TRUE,tuberculosis,Tuberculosis,tuberculosis,Tuberculosis,pmh_tuberculosis,BOOLEAN,Q2:Q500,,Boolean indicating if patient has tuberculosis,f9cb9c
+,pastmedicalhistory,TRUE,diabetes,Diabetes,diabetes,Diabetes,pmh_diabetes,BOOLEAN,R2:R500,,Boolean indicating if patient has diabetes,f9cb9c
+,pastmedicalhistory,TRUE,hypertension,Hypertension,hypertension,Hypertension,pmh_hypertension,BOOLEAN,S2:S500,,Boolean indicating if patient has hypertension,f9cb9c
+,pastmedicalhistory,TRUE,hyperlipidemia,Hyperlipidemia,hyperlipidemia,Hyperlipidemia,pmh_hyperlipidemia,BOOLEAN,T2:T500,,Boolean indicating if patient has hyperlipidemia,f9cb9c
+,pastmedicalhistory,TRUE,chronic_joint_pains,ChronicJointPains,chronicJointPains,Chronic Joint Pains,pmh_chronic_joint_pains,BOOLEAN,U2:U500,,Boolean indicating if patient has chronic joint pains,f9cb9c
+,pastmedicalhistory,TRUE,chronic_muscle_aches,ChronicMuscleAches,chronicMuscleAches,Chronic Muscle Aches,pmh_chronic_muscle_aches,BOOLEAN,V2:V500,,Boolean indicating if patient has chronic muscle aches,f9cb9c
+,pastmedicalhistory,TRUE,sexually_transmitted_disease,SexuallyTransmittedDisease,sexuallyTransmittedDisease,Sexually transmitted disease,pmh_sexually_transmitted_disease,BOOLEAN,W2:W500,,Boolean indicating if patient has a sexually transmitted disease,f9cb9c
+,pastmedicalhistory,FALSE,specified_stds,SpecifiedSTDs,specifiedSTDs,"If Y to STD, specify:",pmh_specified_stds,TEXT,X2:X500,,"Details of specified sexually transmitted diseases, if any",f9cb9c
+,pastmedicalhistory,FALSE,others,Others,others,PMH Others,pmh_others,TEXT,Y2:Y500,,Any other relevant medical conditions or notes,f9cb9c
+Social History,socialhistory,TRUE,past_smoking_history,PastSmokingHistory,pastSmokingHistory,Past smoking history,sh_past_smoking_history,BOOLEAN,Z2:Z500,,Boolean indicating if the patient has a history of smoking,ffe599
+,socialhistory,FALSE,no_of_years,NumberOfYears,numberOfYears,"If Y, no. of years",sh_no_of_years,INTEGER,AA2:AA500,,Number of years the patient has smoked,ffe599
+,socialhistory,TRUE,current_smoking_history,CurrentSmokingHistory,currentSmokingHistory,Current smoking history,sh_current_smoking_history,BOOLEAN,AB2:AB500,,Boolean indicating if the patient currently smokes,ffe599
+,socialhistory,FALSE,cigarettes_per_day,CigarettesPerDay,cigarettesPerDay,"If Y, how many cigarettes per day",sh_cigarettes_per_day,INTEGER,AC2:AC500,,Number of cigarettes the patient smokes per day,ffe599
+,socialhistory,TRUE,alcohol_history,AlcoholHistory,alcoholHistory,Alcohol history,sh_alcohol_history,BOOLEAN,AD2:AD500,,Boolean indicating if the patient has a history of alcohol consumption,ffe599
+,socialhistory,FALSE,how_regular,HowRegular,howRegular,"If Y, how regularly?",sh_how_regular,VARCHAR_1,AE2:AE500,,"Char 'A', 'B', 'C, 'D' indicating patient's frequency of alcohol consumption",ffe599
+Vital Statistics,vitalstatistics,TRUE,temperature,Temperature,temperature,Temperature,vs_temperature,NUMERIC_5_1,AF2:AF500,,"Patient's body temperature in degrees Celsius, 5 digits with 1 dp",b6d7a8
+,vitalstatistics,TRUE,spo2,SpO2,spO2,SpO2,vs_spo2,NUMERIC_5_1,AG2:AG500,,Oxygen saturation level in percentage,b6d7a8
+,vitalstatistics,FALSE,systolic_bp1,SystolicBP1,systolicBP1,Systolic BP1,vs_systolic_bp1,NUMERIC_5_1,AH2:AH500,,Systolic blood pressure measurement 1,b6d7a8
+,vitalstatistics,FALSE,diastolic_bp1,DiastolicBP1,diastolicBP1,Diastolic BP1,vs_diastolic_bp1,NUMERIC_5_1,AI2:AI500,,Diastolic blood pressure measurement 1,b6d7a8
+,vitalstatistics,FALSE,systolic_bp2,SystolicBP2,systolicBP2,Systolic BP2,vs_systolic_bp2,NUMERIC_5_1,AJ2:AJ500,,Systolic blood pressure measurement 2,b6d7a8
+,vitalstatistics,FALSE,diastolic_bp2,DiastolicBP2,diastolicBP2,Diastolic BP2,vs_diastolic_bp2,NUMERIC_5_1,AK2:AK500,,Diastolic blood pressure measurement 2,b6d7a8
+,vitalstatistics,FALSE,avg_systolic_bp,AverageSystolicBP,averageSystolicBP,Avg Systolic BP,vs_avg_systolic_bp,NUMERIC_5_1,AL2:AL500,,Average systolic blood pressure,b6d7a8
+,vitalstatistics,FALSE,avg_diastolic_bp,AverageDiastolicBP,averageDiastolicBP,Avg Diastolic BP,vs_avg_diastolic_bp,NUMERIC_5_1,AM2:AM500,,Average diastolic blood pressure,b6d7a8
+,vitalstatistics,TRUE,hr1,HR1,hr1,HR1,vs_hr1,NUMERIC_5_1,AN2:AN500,,Heart rate measurement 1,b6d7a8
+,vitalstatistics,TRUE,hr2,HR2,hr2,HR2,vs_hr2,NUMERIC_5_1,AO2:AO500,,Heart rate measurement 2,b6d7a8
+,vitalstatistics,TRUE,avg_hr,AverageHR,averageHR,Avg HR,vs_avg_hr,NUMERIC_5_1,AP2:AP500,,Average heart rate,b6d7a8
+,vitalstatistics,TRUE,rand_blood_glucose_mmoll,RandomBloodGlucoseMmolL,randomBloodGlucoseMmolL,Random Blood Glucose (mmol/L),vs_rand_blood_glucose_mmoll,NUMERIC_5_1,AQ2:AQ500,,Random blood glucose level in mmol/L,b6d7a8
+Height And Weight,heightandweight,TRUE,height,Height,height,Height (cm),haw_height,NUMERIC_5_1,AR2:AR500,,Patient's height in meters (with 1 decimal place),00ffff
+,heightandweight,TRUE,weight,Weight,weight,Weight (kg),haw_weight,NUMERIC_5_1,AS2:AS500,,Patient's weight in kilograms (with 1 decimal place),00ffff
+,heightandweight,TRUE,bmi,BMI,bmi,BMI,haw_bmi,NUMERIC_5_1,AT2:AT500,,Body Mass Index (BMI) value (with 1 decimal place),00ffff
+,heightandweight,TRUE,bmi_analysis,BMIAnalysis,bmiAnalysis,BMI Analysis,haw_bmi_analysis,TEXT,AU2:AU500,,Analysis or interpretation of the BMI value,00ffff
+,heightandweight,FALSE,paeds_height,PaedsHeight,paedsHeight,Paeds: Height %,haw_paeds_height,NUMERIC_5_1,AV2:AV500,,Pediatric height measurement in meters (with 1 decimal place),00ffff
+,heightandweight,FALSE,paeds_weight,PaedsWeight,paedsWeight,Paeds: Weight %,haw_paeds_weight,NUMERIC_5_1,AW2:AW500,,Pediatric weight measurement in kilograms (with 1 decimal place),00ffff
+Visual Acuity,visualacuity,TRUE,l_eye_vision,LEyeVision,lEyeVision,L eye vision (6/),va_l_eye_vision,INTEGER,AX2:AX500,,Vision measurement for the left eye,a4c2f4
+,visualacuity,TRUE,r_eye_vision,REyeVision,rEyeVision,R eye vision (6/),va_r_eye_vision,INTEGER,AY2:AY500,,Vision measurement for the right eye,a4c2f4
+,visualacuity,FALSE,additional_intervention,AdditionalIntervention,additionalIntervention,Additional Intervention,va_additional_intervention,TEXT,AZ2:AZ500,,Details of any additional intervention or notes,a4c2f4
+Dental,dental,TRUE,clean_teeth_freq,CleanTeethFreq,cleanTeethFreq,How many days per week do you clean your child’s teeth or supervise/monitor them brush with fluoride toothpaste twice a day?,d_clean_teeth_freq,INTEGER,BA2:BA500,"0,1,2,3,4,5,6,7","Integer range [1,7]. Oral Hygiene Question: How many days per week do you clean your child's teeth or supervise / monitor them brush with fluoride toothpaste twice a day?",b4a7d6
+,dental,TRUE,sugar_consume_freq,SugarConsumeFreq,sugarConsumeFreq,"On average, how many times daily does your child consume starch or sugar (food or drinks) between meals?",d_sugar_consume_freq,INTEGER,BB2:BB500,"0,1,2,3,4,5,6","Integer range [0,6]. Diet Question: On average, how many times daily does your child consume starch or sugar (food or drinks) between meals?",b4a7d6
+,dental,TRUE,past_year_decay,PastYearDecay,pastYearDecay,Has anyone in the immediate family (including a caregiver) had tooth decay or lost a tooth from tooth decay in the past year?,d_past_year_decay,BOOLEAN,BC2:BC500,,Bacterial Exposure Question: Has anyone in the immediate family (including a caregiver) had tooth decay or lost a tooth from tooth decay in the past year?,b4a7d6
+,dental,TRUE,brush_teeth_pain,BrushTeethPain,brushTeethPain,Oral symptoms question: Does your child complain of tooth pain or bleeding gums when they brush their teeth,d_brush_teeth_pain,BOOLEAN,BD2:BD500,,Oral Symptoms Question: Does your child complain of tooth pain or bleeding gums when they brush their teeth?,b4a7d6
+,dental,TRUE,drink_other_water,DrinkOtherWater,drinkOtherWater,Does your child wake up to drink anything other than water throughout the night?,d_drink_other_water,BOOLEAN,BE2:BE500,,Oral Hygiene Question: Does your child wake up to drink anything other than water throughout the night?,b4a7d6
+,dental,FALSE,dental_notes,DentalNotes,dentalNotes,Dental notes?,d_dental_notes,TEXT,BF2:BF500,,Additional notes,b4a7d6
+,dental,TRUE,referral_needed,ReferralNeeded,referralNeeded,Dental Referral needed?,d_referral_needed,BOOLEAN,BG2:BG500,,Is additional referral needed,b4a7d6
+,dental,FALSE,referral_loc,ReferralLoc,referralLoc,Referral location?,d_referral_loc,TEXT,BH2:BH500,,Referral location if applicable,b4a7d6
+,dental,FALSE,tooth_11,Tooth11,tooth11,Tooth11,d_tooth_11,BOOLEAN,BI2:BI500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_12,Tooth12,tooth12,Tooth12,d_tooth_12,BOOLEAN,BJ2:BJ500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_13,Tooth13,tooth13,Tooth13,d_tooth_13,BOOLEAN,BK2:BK500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_14,Tooth14,tooth14,Tooth14,d_tooth_14,BOOLEAN,BL2:BL500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_15,Tooth15,tooth15,Tooth15,d_tooth_15,BOOLEAN,BM2:BM500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_16,Tooth16,tooth16,Tooth16,d_tooth_16,BOOLEAN,BN2:BN500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_17,Tooth17,tooth17,Tooth17,d_tooth_17,BOOLEAN,BO2:BO500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_18,Tooth18,tooth18,Tooth18,d_tooth_18,BOOLEAN,BP2:BP500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_21,Tooth21,tooth21,Tooth21,d_tooth_21,BOOLEAN,BQ2:BQ500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_22,Tooth22,tooth22,Tooth22,d_tooth_22,BOOLEAN,BR2:BR500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_23,Tooth23,tooth23,Tooth23,d_tooth_23,BOOLEAN,BS2:BS500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_24,Tooth24,tooth24,Tooth24,d_tooth_24,BOOLEAN,BT2:BT500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_25,Tooth25,tooth25,Tooth25,d_tooth_25,BOOLEAN,BU2:BU500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_26,Tooth26,tooth26,Tooth26,d_tooth_26,BOOLEAN,BV2:BV500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_27,Tooth27,tooth27,Tooth27,d_tooth_27,BOOLEAN,BW2:BW500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_28,Tooth28,tooth28,Tooth28,d_tooth_28,BOOLEAN,BX2:BX500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_31,Tooth31,tooth31,Tooth31,d_tooth_31,BOOLEAN,BY2:BY500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_32,Tooth32,tooth32,Tooth32,d_tooth_32,BOOLEAN,BZ2:BZ500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_33,Tooth33,tooth33,Tooth33,d_tooth_33,BOOLEAN,CA2:CA500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_34,Tooth34,tooth34,Tooth34,d_tooth_34,BOOLEAN,CB2:CB500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_35,Tooth35,tooth35,Tooth35,d_tooth_35,BOOLEAN,CC2:CC500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_36,Tooth36,tooth36,Tooth36,d_tooth_36,BOOLEAN,CD2:CD500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_37,Tooth37,tooth37,Tooth37,d_tooth_37,BOOLEAN,CE2:CE500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_38,Tooth38,tooth38,Tooth38,d_tooth_38,BOOLEAN,CF2:CF500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_41,Tooth41,tooth41,Tooth41,d_tooth_41,BOOLEAN,CG2:CG500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_42,Tooth42,tooth42,Tooth42,d_tooth_42,BOOLEAN,CH2:CH500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_43,Tooth43,tooth43,Tooth43,d_tooth_43,BOOLEAN,CI2:CI500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_44,Tooth44,tooth44,Tooth44,d_tooth_44,BOOLEAN,CJ2:CJ500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_45,Tooth45,tooth45,Tooth45,d_tooth_45,BOOLEAN,CK2:CK500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_46,Tooth46,tooth46,Tooth46,d_tooth_46,BOOLEAN,CL2:CL500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_47,Tooth47,tooth47,Tooth47,d_tooth_47,BOOLEAN,CM2:CM500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+,dental,FALSE,tooth_48,Tooth48,tooth48,Tooth48,d_tooth_48,BOOLEAN,CN2:CN500,,Indicates whether this tooth has a cavity. Defaults to null.,b4a7d6
+Fall Risk,fallrisk,TRUE,fall_worries,FallWorries,fallWorries,How often do you worry about falling?,fr_fall_worries,VARCHAR_1,CO2:CO500,"a,b,c,d",Multiple option question regarding fall in past 12 months,6fa8dc
+,fallrisk,TRUE,fall_history,FallHistory,fallHistory,History of fall within past 12 months,fr_fall_history,VARCHAR_1,CP2:CP500,"a,b,c,d",Multiple option question,6fa8dc
+,fallrisk,TRUE,cognitive_status,CognitiveStatus,cognitiveStatus,Cognitive status,fr_cognitive_status,VARCHAR_1,CQ2:CQ500,"a,b,c,d",Multiple option question,6fa8dc
+,fallrisk,TRUE,continence_problems,ContinenceProblems,continenceProblems,Continence problems,fr_continence_problems,VARCHAR_1,CR2:CR500,"a,b,c,d,e",Multiple option question,6fa8dc
+,fallrisk,TRUE,safety_awareness,SafetyAwareness,safetyAwareness,Safety Awareness,fr_safety_awareness,VARCHAR_1,CS2:CS500,"a,b,c,d",Multiple option question,6fa8dc
+,fallrisk,TRUE,unsteadiness,Unsteadiness,unsteadiness,"Unsteadiness when standing, transferring and/or walking",fr_unsteadiness,VARCHAR_1,CT2:CT500,"a,b,c,d",,6fa8dc
+,fallrisk,TRUE,fall_risk_score,FallRiskScore,fallRiskScore,Total Score (High Risk: ≥ 8),fr_fall_risk_score,INTEGER,CU2:CU500,,Calculated fall risk score based on previous fall risk questions,6fa8dc
+Doctor's Consultation,doctorsconsultation,TRUE,well,Well,well,Well,dc_well,BOOLEAN,CV2:CV500,,Boolean indicating if the patient is well,c27ba0
+,doctorsconsultation,TRUE,msk,Msk,msk,MSK,dc_msk,BOOLEAN,CW2:CW500,,Boolean indicating if musculoskeletal system is healthy,c27ba0
+,doctorsconsultation,TRUE,cvs,Cvs,cvs,CVS,dc_cvs,BOOLEAN,CX2:CX500,,Boolean indicating if cardiovascular system is healthy,c27ba0
+,doctorsconsultation,TRUE,respi,Respi,respi,Respi,dc_respi,BOOLEAN,CY2:CY500,,Boolean indicating if respiratory system is healthy,c27ba0
+,doctorsconsultation,TRUE,gu,Gu,gu,GU,dc_gu,BOOLEAN,CZ2:CZ500,,Boolean indicating if,c27ba0
+,doctorsconsultation,TRUE,git,Git,git,GIT,dc_git,BOOLEAN,DA2:DA500,,Boolean indicating if,c27ba0
+,doctorsconsultation,TRUE,eye,Eye,eye,EYE,dc_eye,BOOLEAN,DB2:DB500,,Boolean indicating if eye health is satisfactory,c27ba0
+,doctorsconsultation,TRUE,derm,Derm,derm,DERM,dc_derm,BOOLEAN,DC2:DC500,,Boolean indicating if dermatological health is satisfactory,c27ba0
+,doctorsconsultation,TRUE,others,Others,others,DC OTHERS,dc_others,TEXT,DD2:DD500,,Details of other relevant health assessments,c27ba0
+,doctorsconsultation,FALSE,consultation_notes,ConsultationNotes,consultationNotes,Consultation Notes,dc_consultation_notes,TEXT,DE2:DE500,,General notes from the consultation,c27ba0
+,doctorsconsultation,FALSE,diagnosis,Diagnosis,diagnosis,Diagnosis,dc_diagnosis,TEXT,DF2:DF500,,Diagnosis provided during consultation,c27ba0
+,doctorsconsultation,FALSE,treatment,Treatment,treatment,Treatment,dc_treatment,TEXT,DG2:DG500,,Treatment plan or recommendations,c27ba0
+,doctorsconsultation,TRUE,referral_needed,ReferralNeeded,referralNeeded,Referral Needed?,dc_referral_needed,BOOLEAN,DH2:DH500,,Boolean indicating if a referral is needed,c27ba0
+,doctorsconsultation,FALSE,referral_loc,ReferralLoc,referralLoc,Referral Location,dc_referral_loc,TEXT,DI2:DI500,,"Location or details for the referral, if needed",c27ba0
+,doctorsconsultation,FALSE,remarks,Remarks,remarks,Remarks (anything that doesn't fit),dc_remarks,TEXT,DJ2:DJ500,,Additional remarks or comments,c27ba0

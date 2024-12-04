@@ -16,7 +16,7 @@ Takes csv files from patientdata_file_path and types from types_file_path.
 Places generated DataSheet.xlsx in the same directory as the script.
 """
 class Initialiser:
-    def __init__(self, patientdata_file_path, types_file_path):
+    def __init__(self, patientdata_file_path, types_filepath):
         """
         Initialize the Validator object with a CSV file path.
 
@@ -24,7 +24,7 @@ class Initialiser:
             csv_folder_path (str): The path to the CSV file to be validated.
         """
         self.csv_folder_path: str = patientdata_file_path
-        self.types_file_path: str = types_file_path
+        self.types_filepath: str = types_filepath
         self.df: pd.DataFrame = None
         self.wb = None
         self.ws = None
@@ -36,8 +36,11 @@ class Initialiser:
         """
         Do preliminary initialisation
         """
-        self.types = Types(self.types_file_path)
-        print(f"Types '{self.types_file_path}' initialised successfully!")
+        try:
+            self.types = Types(self.types_filepath)
+            print(f"Types '{self.types_filepath}' read successfully!")
+        except Exception as e:
+            print(f"Error reading types file '{self.types_filepath}': {e}")
 
     def readCSV(self):
         """
