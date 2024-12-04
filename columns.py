@@ -1,8 +1,19 @@
-# Maps CSV cols to Data Sheet cols
 from enum import Enum
 from typing import List, Optional
 from openpyxl.worksheet.datavalidation import DataValidation
 import csv
+
+# Database configuration
+# Note - The contents of this has to be changed in prod!
+
+DATABASE = {
+    "database_name": "patients",
+    "host_name": "localhost",
+    "user_name": "jieqiboh",
+    "password": "postgres",
+    "port_number": "5432"
+}
+
 
 class DataType(Enum):
     def __new__(cls, sql_type, validation: Optional[DataValidation] = None):
@@ -77,15 +88,15 @@ class FieldDescriptor:
 
     def __init__(self, sql_name: str, go_name: str, json_name: str, datasheet_name: str, csv_name: str,
                  datatype: DataType, colour: str, required: bool = False, datasheet_range: str = None):
-        self.sql_name: str = sql_name                   # SQL column name
-        self.go_name: str = go_name                     # Go struct field name
-        self.json_name: str = json_name                 # JSON field name
-        self.datasheet_name: str = datasheet_name       # DataSheet column name
-        self.csv_name: str = csv_name                   # CSV column name in patientdata.csv
-        self.datatype: DataType = datatype              # Data type of the field (Loosely follows SQL type)
-        self.colour: str = colour                       # Column colour
-        self.required: bool = required                  # Whether the field is required
-        self.datasheet_range: str = datasheet_range     # Range of the column in the datasheet
+        self.sql_name: str = sql_name  # SQL column name
+        self.go_name: str = go_name  # Go struct field name
+        self.json_name: str = json_name  # JSON field name
+        self.datasheet_name: str = datasheet_name  # DataSheet column name
+        self.csv_name: str = csv_name  # CSV column name in patientdata.csv
+        self.datatype: DataType = datatype  # Data type of the field (Loosely follows SQL type)
+        self.colour: str = colour  # Column colour
+        self.required: bool = required  # Whether the field is required
+        self.datasheet_range: str = datasheet_range  # Range of the column in the datasheet
 
     def __repr__(self):
         return self.sql_name
@@ -103,13 +114,16 @@ class CategoryDescriptor:
     def __repr__(self):
         return self.name
 
-
 class Types:
     def __init__(self, csv_path: str):
         self.categories: List[CategoryDescriptor] = []  # An array of CategoryDescriptor objects
-        self._load_from_csv(csv_path)
+        self.csv_sql_map = {}
 
-    def _load_from_csv(self, csv_path: str):
+        self.load_from_csv(csv_path) # Has to come first!
+        self.initMaps()
+
+
+    def load_from_csv(self, csv_path: str):
         # Dictionary to store category-to-fields mapping
         category_map = {}
 
@@ -151,6 +165,22 @@ class Types:
         # Convert category_map to CategoryDescriptors
         for category, fields in category_map.items():
             self.categories.append(CategoryDescriptor(name=category, fields=fields))
+
+    def initMaps(self):
+        """
+        Initialize some maps used for name conversion
+        """
+        csv_sql_map = {}
+
+        for category in self.categories:
+            csv_sql_map[category.name] = {}
+            csv_sql_map[category.name]["id"] = "id"  # Hardcoded id and vid
+            csv_sql_map[category.name]["vid"] = "vid"  # Hardcoded id and vid
+            for field in category.fields:
+                # Get the sql name and csv name for each field to generate the map
+                csv_sql_map[category.name][field.csv_name] = field.sql_name
+
+        self.csv_sql_map = csv_sql_map
 
     def __repr__(self):
         return f"Types(categories={self.categories})"
