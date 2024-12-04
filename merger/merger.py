@@ -37,7 +37,7 @@ class Merger:
 
     def readDataSheets(self):
         """
-        Read all XLSX / CSV files in the specified directory.
+        Read all XLSX / CSV files in the specified directory and check for issues.
 
         Returns:
             dataframes (list): List of dataframes read from XLSX / CSV files.
@@ -80,6 +80,17 @@ class Merger:
                         print(f"Skipping file {file} due to column mismatches.")
                         continue  # Skip adding this dataframe to the list
 
+                    # Check for duplicate Registration ID and Visit ID
+                    if {'Registration ID', 'Visit ID'}.issubset(df.columns):
+                        duplicates = df[df.duplicated(subset=['Registration ID', 'Visit ID'], keep=False)]
+                        if not duplicates.empty:
+                            problems.append({
+                                "file": file,
+                                "duplicates": duplicates[['Registration ID', 'Visit ID']].to_dict(orient='records')
+                            })
+                            print(f"File {file} has duplicate Registration ID and Visit ID entries.")
+                            # Log the duplicates but still add the dataframe
+
                     # Add the dataframe to the list
                     dataframes.append(df)
 
@@ -88,15 +99,19 @@ class Merger:
 
         # Print problems if there are any
         if problems:
-            print("Column name validation issues found:")
+            print("Validation issues found:")
             for problem in problems:
-                print(f"File: {problem['file']}")
-                if problem['invalid_columns']:
+                print(f"File: {problem.get('file')}")
+                if "invalid_columns" in problem:
                     print(f"  Invalid columns: {', '.join(problem['invalid_columns'])}")
-                if problem['missing_columns']:
+                if "missing_columns" in problem:
                     print(f"  Missing columns: {', '.join(problem['missing_columns'])}")
+                if "duplicates" in problem:
+                    print("  Duplicate Registration ID and Visit ID entries:")
+                    for duplicate in problem['duplicates']:
+                        print(f"    {duplicate}")
         else:
-            print("All files have valid columns.")
+            print("All files have valid columns and no duplicate IDs.")
 
         # Store the dataframes in the class
         self.dataframes = dataframes
@@ -114,11 +129,10 @@ class Merger:
             self.df = pd.concat(self.dataframes, ignore_index=True)
 
             # Rename columns based on the types
-            self.rename_columns()
+            self.renameColumns()
 
             # Group by 'id' and 'vid' and aggregate to merge rows
             self.df = self.df.groupby(self.merge_cols, as_index=False).first()
-
 
             # Save the merged dataframe to a new CSV file
             self.df.to_csv(output_file, index=False)
@@ -126,7 +140,7 @@ class Merger:
         else:
             print("No valid files to merge.")
 
-    def rename_columns(self):
+    def renameColumns(self):
         """
         Renames the columns of the existing DataFrame based on a datasheet_name to csv_name mapping.
 
