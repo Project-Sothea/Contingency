@@ -2,7 +2,6 @@ import os
 import pandas as pd
 import columns
 from columns import Types
-from columns import DataType
 
 """
 Merge DataSheet.xlsx files in the specified directory on a set of columns (id, vid)
@@ -11,30 +10,30 @@ Have a log to indicate files that
 
 
 class Merger:
-    def __init__(self, uploads_directory_filepath: str, types_filepath: str, merge_cols=None):
+    def __init__(self, uploads_directory_file_path: str, types_file_path: str, merge_cols=None):
         """
         Initialize the Merger object with the directory containing XLSX / CSV files.
 
         Args:
             directory (str): Path to the directory containing the XLSX / CSV files.
         """
-        self.directory = uploads_directory_filepath
-        self.types_filepath: str = types_filepath
+        self.types: columns.Types = None
+        self.directory = uploads_directory_file_path
+        self.types_file_path: str = types_file_path
         self.dataframes: list[pd.DataFrame] = []
         self.df: pd.DataFrame = None
-        self.types: columns.Types
         self.merge_cols: list[str] = merge_cols if merge_cols is not None else [] # String value of columns to merge on
 
-    def initialiseTypes(self):
+    def initialise(self):
         """
+        Do necessary initialisations for the Merger class
         Initialise the 'Types' object with the types CSV file.
         """
         try:
-            # Initialise Types
-            self.types = Types(self.types_filepath)
-            print(f"Types '{self.types_filepath}' read successfully!")
+            self.types = Types(self.types_file_path)
+            print(f"Types '{self.types_file_path}' read successfully!")
         except Exception as e:
-            print(f"Error reading types file '{self.types_filepath}': {e}")
+            print(f"Error reading types file '{self.types_file_path}': {e}")
 
     def readDataSheets(self):
         """
@@ -154,10 +153,10 @@ class Merger:
 
 if __name__ == "__main__":
     # Directory containing the CSV files
-    uploads_directory_filepath = "../server/uploads/"  # Replace with your directory path
-    types_filepath = "../types.csv"                    # Replace with path to types.csv
+    uploads_directory_file_path = "../server/uploads/"  # Replace with your directory path
+    types_file_path = "../types.csv"                    # Replace with path to types.csv
 
-    merger = Merger(uploads_directory_filepath, types_filepath, ["id", "vid"])
-    merger.initialiseTypes()
+    merger = Merger(uploads_directory_file_path, types_file_path, ["id", "vid"])
+    merger.initialise()
     merger.readDataSheets()
     merger.mergeDataSheets()
