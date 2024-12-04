@@ -3,3 +3,6 @@ xlsxwriter
 pandas~=2.2.3
 openpyxl~=3.1.5
 Flask~=3.1.0
+schedule~=1.2.2
+wheel~=0.41.2
+SQLAlchemy~=2.0.36
