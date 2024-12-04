@@ -2,34 +2,61 @@
 Contains utilities used for converting application database data to usable Data Sheets, and for merging Data Sheets to be imported
 into the application database.
 
-### `Merger.py`
-Merger script that takes a directory of Data Sheets and merges them into a single Data Sheet.
-Cannot assume formatting and values of the Data Sheet columns to be correct.
-
 ### `Initialiser.py`
 Initialiser script that takes a CSV file of the application database and converts it to a usable Data Sheet by drs.
 Can assume formatting and values of the CSV file to be correct.
-Some things it does include: 
+Some things it does include:
 - Renames columns
 - Applies xlsx data validation rules
 - Formats cells to have dropdowns to select from
+ 
+### `Merger.py`
+Merger script that takes a directory of Data Sheets and merges them into a single Data Sheet.
+
+If a DataSheet has duplicate rows, the script will arbitrarily choose one of the rows, and discard the other one.
+It will log the DataSheets with duplicates for further checking later on.
+
+If multiple DataSheets have overlapping rows filled out for a patient, the script will arbitrarily keep one.
 
 ### `Importer.py`
 Takes a successfully merged Data Sheet and imports it into the application database.
 
 ### How to use:
-- Converting DB to Data Sheet: (System is down)
-    1. Run the Initialiser script with the CSV file of the application database as input, generating a formatted, ready-to-use Data Sheet.
-    2. Disseminate the Data Sheet for the various stations to start using (Manually / Network File Sharing system)
+Ensure that types.csv is in the project, and up-to-date.
 
-- Converting Data Sheet to DB: (System is back up)
-    1. Collate all the Data Sheets from the various stations. (Manually / Network File Sharing System)
-    2. Merge the Data Sheets into a single Data Sheet using the Merger script.
-    3. Import the merged Data Sheet into the application database using the Importer script.
+Initially when the system is working:
+Cron Job:
+1. While the biometrics system is up, run /cron/job.py, to grab csv backups of the database every minute.
+2. Periodically check /cron/logfile.log to ensure that the backups are working
 
-### Files
-- patientdata.csv
+Converting DB to Data Sheet: (System is down)
+1. Run the Initialiser.py script, which pulls the latest backup csv from /cron/backups, and converts it to DataSheet.xlsx. 
+2. Place the DataSheet.xlsx in the /server/uploads folder for the stations to use.
+3. Navigate to /server/, and start up the webserver with `python app.py`, so that users can download the DataSheet.xlsx file to use. 
+   - If the server is down, share the DataSheet.xlsx file using thumbdrives
 
-- DataSheet.xlsx
+Converting Data Sheet to DB: (System is back up)
+1. Ensure the system is back up.
+2. Navigate to /server/, and start up the webserver with `python app.py`, so that users can upload their DataSheet.xlsx files.
+   - If the server is down, collect the DataSheet.xlsx files using thumbdrives, then place them in the /server/uploads folder. Naming shouldn't matter.
+3. Run Merger.py, merge the DataSheets into a single merged_output.csv file.
+4. Go to PGAdmin, and run the following SQL command to clear the database:
+```sql
+TRUNCATE TABLE admin CASCADE;
+```
+4. Run Importer.py to import the merged_output.csv file into the database.
 
-- types.csv
+### To Do:
+- Test backup_script.bat works on another machine
+- Make script work from another machine over a network
+- Merger: Gets uploaded DataSheet.xlsx files from /server/uploads, merges them and saves to /merger/merged folder
+- Importer: Gets merged DataSheet.xlsx files from /merger/merged, imports them into the database
+
+- BUG: Type coercion for columns after concatenation in merger.py causes numeric values to become floats. doesn't seem to affect ability to import yett
+ 
+### CAUTION
+- In order to prevent accidentally running the script and resetting the database, the script will only work if the existing tables are cleared.
+- To clear the database, enter the Query Editor in pgAdmin and run the following SQL command manually:
+```sql
+TRUNCATE TABLE admin CASCADE;
+```
