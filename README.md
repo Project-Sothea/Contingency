@@ -6,8 +6,8 @@ into the application database.
 
 We recommend configuring a virtual environment for this project.
 1. `cd` to the project root
-2. `python3 -m venv venv`
-3. `source venv/bin/activate`
+2. `python3 -m venv venv` / `python3 -m venv venv` 
+3. `source venv/bin/activate` / `.\venv\Scripts\activate.bat`
 4. In your IDE, configure the Python interpreter to use the virtual environment
 5. For initial setup, do `pip install -r requirements.txt`
 
