@@ -4,12 +4,13 @@ import datetime
 import time
 import schedule
 from pathlib import Path
+from columns import DATABASE
 
 # PostgreSQL connection parameters
-PGHOST = "localhost"
-PGUSER = "jieqiboh"
-PGPASSWORD = "postgres"
-PGDATABASE = "patients"
+PGHOST = DATABASE["host_name"]
+PGUSER = DATABASE["user_name"]
+PGPASSWORD = DATABASE["password"]
+PGDATABASE = DATABASE["database_name"]
 
 
 # Function to execute the export
