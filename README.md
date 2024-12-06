@@ -11,6 +11,8 @@ We recommend configuring a virtual environment for this project.
 4. In your IDE, configure the Python interpreter to use the virtual environment
 5. For initial setup, do `pip install -r requirements.txt`
 
+You can configure the database connection parameters in `columns.py`
+
 ### `Initialiser.py`
 Initialiser script that takes a CSV file of the application database and converts it to a usable Data Sheet by drs.
 Can assume formatting and values of the CSV file to be correct.
@@ -35,8 +37,8 @@ Ensure that types.csv is in the project, and up-to-date.
 
 Initially when the system is working:
 Cron Job:
-1. While the biometrics system is up, run /cron/job.py, to grab csv backups of the database every minute.
-2. Periodically check /cron/logfile.log to ensure that the backups are working
+1. While the biometrics system is up, run /cron/backup.py, to grab csv backups of the database every minute.
+2. Periodically check the run logs to ensure that the backups are working
 
 Converting DB to Data Sheet: (System is down)
 1. Run the Initialiser.py script, which pulls the latest backup csv from /cron/backups, and converts it to DataSheet.xlsx. 
