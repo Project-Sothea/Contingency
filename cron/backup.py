@@ -125,6 +125,15 @@ def export_patient_data():
     fr.safety_awareness AS fr_safety_awareness,
     fr.unsteadiness AS fr_unsteadiness,
     fr.fall_risk_score AS fr_fall_risk_score,
+    p.pain_stiffness_day AS p_pain_stiffness_day,
+    p.pain_stiffness_night AS p_pain_stiffness_night,
+    p.symptoms_interfere_tasks AS p_symptoms_interfere_tasks,
+    p.symptoms_change AS p_symptoms_change,
+    p.symptoms_need_help AS p_symptoms_need_help,
+    p.trouble_sleep_symptoms AS p_trouble_sleep_symptoms,
+    p.how_much_fatigue AS p_how_much_fatigue,
+    p.anxious_low_mood AS p_anxious_low_mood,
+    p.medication_manage_symptoms AS p_medication_manage_symptoms,
     dc.well AS dc_well,
     dc.msk AS dc_msk,
     dc.cvs AS dc_cvs,
@@ -149,6 +158,7 @@ def export_patient_data():
     LEFT JOIN visualacuity va ON a.id = va.id AND a.vid = va.vid
     LEFT JOIN dental d ON a.id = d.id AND a.vid = d.vid
     LEFT JOIN fallrisk fr ON a.id = fr.id AND a.vid = fr.vid
+    LEFT JOIN physiotherapy p ON a.id = p.id AND a.vid = p.vid
     LEFT JOIN doctorsconsultation dc ON a.id = dc.id AND a.vid = dc.vid
     ) TO STDOUT WITH CSV HEADER;
     """
