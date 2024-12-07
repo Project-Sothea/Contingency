@@ -35,10 +35,14 @@ Takes a successfully merged Data Sheet and imports it into the application datab
 ### How to use:
 Ensure that types.csv is in the project, and up-to-date.
 
+### Configuring columns.py
+Fill out the columns.py file with the correct parameters for the database.
+
 Initially when the system is working:
 Cron Job:
 1. While the biometrics system is up, run /cron/backup.py, to grab csv backups of the database every minute.
 2. Periodically check the run logs to ensure that the backups are working
+3. You can also make sure the webserver is running in advance.
 
 Converting DB to Data Sheet: (System is down)
 1. Run the Initialiser.py script, which pulls the latest backup csv from /cron/backups, and converts it to DataSheet.xlsx. 
@@ -51,7 +55,7 @@ Converting Data Sheet to DB: (System is back up)
 2. Navigate to /server/, and start up the webserver with `python app.py`, so that users can upload their DataSheet.xlsx files.
    - If the server is down, collect the DataSheet.xlsx files using thumbdrives, then place them in the /server/uploads folder. Naming shouldn't matter.
 3. Run Merger.py, merge the DataSheets into a single merged_output.csv file.
-4. Go to PGAdmin, and run the following SQL command to clear the database:
+4. Go to PgAdmin, and run the following SQL command to clear the database:
 ```sql
 TRUNCATE TABLE admin CASCADE;
 ```
