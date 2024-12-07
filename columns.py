@@ -6,6 +6,7 @@ import csv
 # Database configuration
 # Note - The contents of this has to be changed in prod!
 
+# Database to download backups from
 DATABASE = {
     "database_name": "patients",
     "host_name": "localhost",
@@ -14,6 +15,14 @@ DATABASE = {
     "port_number": "5432"
 }
 
+# The database on this machine
+CURRENT_DATABASE = {
+    "database_name": "patients",
+    "host_name": "localhost",
+    "user_name": "jieqiboh",
+    "password": "postgres",
+    "port_number": "5432"
+}
 
 class DataType(Enum):
     def __new__(cls, sql_type, validation: Optional[DataValidation] = None):

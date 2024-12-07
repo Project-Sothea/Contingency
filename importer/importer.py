@@ -9,8 +9,11 @@ from sqlalchemy.orm import sessionmaker
 
 from columns import Types
 from sqlalchemy import create_engine
-from columns import DATABASE
+from columns import CURRENT_DATABASE
 
+"""
+Parses merged_output.csv from the merger folder, and imports
+"""
 
 class Importer:
     def __init__(self, types_file_path: str, csv_file_path: str, database_name: str, host_name: str, user_name: str, password: str, port_number: int):
@@ -112,11 +115,12 @@ class Importer:
 if __name__ == "__main__":
     types_file_path = "../types.csv"
     csv_file_path = "../merger/merged_output.csv"
-    database_name = DATABASE["database_name"]
-    host_name = DATABASE["host_name"]
-    user_name = DATABASE["user_name"]
-    password = DATABASE["password"]
-    port_number = DATABASE["port_number"]
+    database_name = CURRENT_DATABASE["database_name"]
+    host_name = CURRENT_DATABASE["host_name"]
+    user_name = CURRENT_DATABASE["user_name"]
+    password = CURRENT_DATABASE["password"]
+    port_number = CURRENT_DATABASE["port_number"]
+
     importer = Importer(types_file_path, csv_file_path, database_name, host_name, user_name, password, port_number)
     importer.initialise()
     importer.readCSV()
