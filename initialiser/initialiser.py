@@ -1,6 +1,11 @@
 import glob
 import os
 
+import sys
+
+# Add the parent directory of 'columns' to sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+
 import pandas as pd
 from openpyxl.formatting.rule import FormulaRule
 from openpyxl.reader.excel import load_workbook
