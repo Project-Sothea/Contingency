@@ -172,10 +172,10 @@ class Initialiser:
                         max_length = len(cell.value)
                 except:
                     pass
-            adjusted_width = min(35, max_length + 2)
+            adjusted_width = min(40, max_length + 2)
             self.ws.column_dimensions[column].width = adjusted_width
 
-        self.ws.row_dimensions[1].height = 60
+        self.ws.row_dimensions[1].height = 70
         for cell in self.ws[1]:  # Loop through each cell in the first row
             cell.alignment = Alignment(wrap_text=True, horizontal="center", vertical="center")
 
@@ -202,7 +202,7 @@ class Initialiser:
                 for f in category.fields
             ]
 
-            for row_number in range(2, 201): # start and end rows
+            for row_number in range(2, 301): # start and end rows
                 filled_check = ", ".join([f'ISBLANK(${col}{row_number})' for col in required_columns])
                 formula = f'=OR({filled_check})'
                 rule = FormulaRule(formula=[formula], fill=red_fill)

@@ -81,12 +81,12 @@ class Merger:
                         continue  # Skip adding this dataframe to the list
 
                     # Check for duplicate Registration ID and Visit ID
-                    if {'Registration ID', 'Visit ID'}.issubset(df.columns):
-                        duplicates = df[df.duplicated(subset=['Registration ID', 'Visit ID'], keep=False)]
+                    if {'Registration ID*', 'Visit ID*'}.issubset(df.columns):
+                        duplicates = df[df.duplicated(subset=['Registration ID*', 'Visit ID*'], keep=False)]
                         if not duplicates.empty:
                             problems.append({
                                 "file": file,
-                                "duplicates": duplicates[['Registration ID', 'Visit ID']].to_dict(orient='records')
+                                "duplicates": duplicates[['Registration ID*', 'Visit ID*']].to_dict(orient='records')
                             })
                             print(f"File {file} has duplicate Registration ID and Visit ID entries.")
                             # Log the duplicates but still add the dataframe
