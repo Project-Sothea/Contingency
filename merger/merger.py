@@ -130,6 +130,12 @@ class Merger:
         """
         # Merge all dataframes on 'id' and 'vid'
         if self.dataframes:
+            # For every dataframe, rename its columns
+            self.renameColumns()
+
+            # Set column types before pd concat
+            self.setColumntypes()
+
             # Concatenate dataframes
             self.df = pd.concat(self.dataframes, ignore_index=True)
 
@@ -156,7 +162,7 @@ class Merger:
         if self.types is None:
             raise ValueError(
                 "The 'types' object is not initialized. Please initialize 'self.types' before renaming columns.")
-        if self.df is None:
+        if self.dataframes is None:
             raise ValueError(
                 "The DataFrame 'self.df' is not initialized. Please load data into 'self.df' before renaming columns.")
 
@@ -166,8 +172,31 @@ class Merger:
             for field in category.fields:
                 datasheet_to_csv_map[field.datasheet_name] = field.csv_name
 
-        # Rename the columns of the existing DataFrame
-        self.df.rename(columns=datasheet_to_csv_map, inplace=True)
+        # Rename the columns for each dataframe in self.dataframes
+        for dataframe in self.dataframes:
+            dataframe.rename(columns=datasheet_to_csv_map, inplace=True)
+
+    def setColumntypes(self):
+        """
+        Set the appropriate data type for each csv-named column based on non-NaN values for each dataframe in self.dataframes.
+        """
+        if not self.dataframes:
+            raise ValueError(
+                "The 'dataframes' list is empty or not initialized. Please load data into 'self.dataframes' before "
+                "setting column types.")
+
+        for df in self.dataframes:
+            for category in self.types.categories:
+                for field in category.fields:
+                    # Check if the field's CSV name is present in the dataframe columns
+                    if field.csv_name in df.columns:
+                        # Assign the correct dtype based on the field's DataType
+                        if field.datatype == columns.DataType.INTEGER:
+                            df[field.csv_name] = df[field.csv_name].astype('Int64')  # Integer type (nullable)
+                        elif field.datatype == columns.DataType.TEXT:
+                            df[field.csv_name] = df[field.csv_name].astype('string')
+                        elif field.datatype == columns.DataType.NUMERIC_5_1:
+                            df[field.csv_name] = pd.to_numeric(df[field.csv_name], errors='coerce')
 
 
 if __name__ == "__main__":

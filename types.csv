@@ -99,27 +99,27 @@ Fall Risk,fallrisk,TRUE,fall_worries,FallWorries,fallWorries,How often do you wo
 ,fallrisk,TRUE,safety_awareness,SafetyAwareness,safetyAwareness,Safety Awareness (A/B/C/D)*,fr_safety_awareness,VARCHAR_1,CS2:CS500,"a,b,c,d",Multiple option question,6fa8dc
 ,fallrisk,TRUE,unsteadiness,Unsteadiness,unsteadiness,"Unsteadiness when standing, transferring and/or walking (A/B/C/D)*",fr_unsteadiness,VARCHAR_1,CT2:CT500,"a,b,c,d",,6fa8dc
 ,fallrisk,TRUE,fall_risk_score,FallRiskScore,fallRiskScore,Total Score (High Risk: ≥ 8)*,fr_fall_risk_score,INTEGER,CU2:CU500,,Calculated fall risk score based on previous fall risk questions,6fa8dc
-Physiotherapy,physiotherapy,TRUE,pain_stiffness_day,PainStiffnessDay,painStiffnessDay,"Pain/stiffness during the day: How severe was your usual joint or muscle pain and/or stiffness overall during the day in the last 2 weeks? (0,1,2,3,4,5)*",p_pain_stiffness_day,INTEGER,CV2:CV500,"0,1,2,3,4,5 (,1,2,3,4,5)",,999999
-,physiotherapy,TRUE,pain_stiffness_night,PainStiffnessNight,painStiffnessNight,"Pain/stiffness during the night: How severe was your usual joint or muscle pain and/or stiffness overall during the night in the last 2 weeks? (0,1,2,3,4,5)*",p_pain_stiffness_night,INTEGER,CW2:CW500,"0,1,2,3,4,5",,999999
-,physiotherapy,TRUE,symptoms_interfere_tasks,SymptomsInterfereTasks,symptomsInterfereTasks,"How much has your symptoms interfered with your ability to walk or do everyday tasks like cooking, cleaning or dressing in the last 2 weeks? (Never,Rarely,Sometimes,Often,Always)*",p_symptoms_interfere_tasks,TEXT,CX2:CX500,"Never,Rarely,Sometimes,Often,Always",,999999
-,physiotherapy,TRUE,symptoms_change,SymptomsChange,symptomsChange,"Have your symptoms improved, worsened, or stayed the same over the last 2 weeks? (Improved,Worsened,Stayed the same)*",p_symptoms_change,TEXT,CY2:CY500,"Improved,Worsened,Stayed the same",,999999
-,physiotherapy,TRUE,symptoms_need_help,SymptomsNeedHelp,symptomsNeedHelp,"How often have you needed help from others (including family, friends or carers) because of your joint or muscle symptoms in the last 2 weeks? (Never,Rarely,Sometimes,Often,Always)*",p_symptoms_need_help,TEXT,CZ2:CZ500,"Never,Rarely,Sometimes,Often,Always",,999999
-,physiotherapy,TRUE,trouble_sleep_symptoms,TroubleSleepSymptoms,troubleSleepSymptoms,"How often have you had trouble with either falling asleep or staying asleep because of your joint or muscle symptoms in the last 2 weeks? (Never,Rarely,Sometimes,Often,Always)*",p_trouble_sleep_symptoms,TEXT,DA2:DA500,"Never,Rarely,Sometimes,Often,Always",,999999
-,physiotherapy,TRUE,how_much_fatigue,HowMuchFatigue,howMuchFatigue,"How much fatigue or low energy have you felt in the last 2 weeks? (0,1,2,3,4,5)*",p_how_much_fatigue,INTEGER,DB2:DB500,"0,1,2,3,4,5",,999999
-,physiotherapy,TRUE,anxious_low_mood,AnxiousLowMood,anxiousLowMood,"How much have you felt anxious or low in your mood because of your joint or muscle symptoms in the last 2 weeks? (0,1,2,3,4,5)*",p_anxious_low_mood,INTEGER,DC2:DC500,"0,1,2,3,4,5",,999999
-,physiotherapy,TRUE,medication_manage_symptoms,MedicationManageSymptoms,medicationManageSymptoms,"Have you used any medication to manage your symptoms in the last 2 weeks? If yes, how often? (Never,Rarely,Sometimes,Often,Always)*",p_medication_manage_symptoms,TEXT,DD2:DD500,"Never,Rarely,Sometimes,Often,Always",,999999
-Doctor's Consultation,doctorsconsultation,TRUE,well,Well,well,Well*,dc_well,BOOLEAN,DE2:DE500,,Boolean indicating if the patient is well,c27ba0
-,doctorsconsultation,TRUE,msk,Msk,msk,MSK*,dc_msk,BOOLEAN,DF2:DF500,,Boolean indicating if musculoskeletal system is healthy,c27ba0
-,doctorsconsultation,TRUE,cvs,Cvs,cvs,CVS*,dc_cvs,BOOLEAN,DG2:DG500,,Boolean indicating if cardiovascular system is healthy,c27ba0
-,doctorsconsultation,TRUE,respi,Respi,respi,Respi*,dc_respi,BOOLEAN,DH2:DH500,,Boolean indicating if respiratory system is healthy,c27ba0
-,doctorsconsultation,TRUE,gu,Gu,gu,GU*,dc_gu,BOOLEAN,DI2:DI500,,Boolean indicating if,c27ba0
-,doctorsconsultation,TRUE,git,Git,git,GIT*,dc_git,BOOLEAN,DJ2:DJ500,,Boolean indicating if,c27ba0
-,doctorsconsultation,TRUE,eye,Eye,eye,EYE*,dc_eye,BOOLEAN,DK2:DK500,,Boolean indicating if eye health is satisfactory,c27ba0
-,doctorsconsultation,TRUE,derm,Derm,derm,DERM*,dc_derm,BOOLEAN,DL2:DL501,,Boolean indicating if dermatological health is satisfactory,c27ba0
-,doctorsconsultation,TRUE,others,Others,others,DC OTHERS*,dc_others,TEXT,DM2:DM501,,Details of other relevant health assessments,c27ba0
-,doctorsconsultation,FALSE,consultation_notes,ConsultationNotes,consultationNotes,Consultation Notes,dc_consultation_notes,TEXT,DN2:DN501,,General notes from the consultation,c27ba0
-,doctorsconsultation,FALSE,diagnosis,Diagnosis,diagnosis,Diagnosis,dc_diagnosis,TEXT,DO2:DO501,,Diagnosis provided during consultation,c27ba0
-,doctorsconsultation,FALSE,treatment,Treatment,treatment,Treatment,dc_treatment,TEXT,DP2:DP501,,Treatment plan or recommendations,c27ba0
-,doctorsconsultation,TRUE,referral_needed,ReferralNeeded,referralNeeded,Referral Needed?*,dc_referral_needed,BOOLEAN,DQ2:DQ501,,Boolean indicating if a referral is needed,c27ba0
-,doctorsconsultation,FALSE,referral_loc,ReferralLoc,referralLoc,Referral Location,dc_referral_loc,TEXT,DR2:DR501,,"Location or details for the referral, if needed",c27ba0
-,doctorsconsultation,FALSE,remarks,Remarks,remarks,Remarks (anything that doesn't fit),dc_remarks,TEXT,DS2:DS501,,Additional remarks or comments,c27ba0
+Doctor's Consultation,doctorsconsultation,TRUE,well,Well,well,Well*,dc_well,BOOLEAN,CV2:CV500,,Boolean indicating if the patient is well,c27ba0
+,doctorsconsultation,TRUE,msk,Msk,msk,MSK*,dc_msk,BOOLEAN,CW2:CW500,,Boolean indicating if musculoskeletal system is healthy,c27ba0
+,doctorsconsultation,TRUE,cvs,Cvs,cvs,CVS*,dc_cvs,BOOLEAN,CX2:CX500,,Boolean indicating if cardiovascular system is healthy,c27ba0
+,doctorsconsultation,TRUE,respi,Respi,respi,Respi*,dc_respi,BOOLEAN,CY2:CY500,,Boolean indicating if respiratory system is healthy,c27ba0
+,doctorsconsultation,TRUE,gu,Gu,gu,GU*,dc_gu,BOOLEAN,CZ2:CZ500,,Boolean indicating if,c27ba0
+,doctorsconsultation,TRUE,git,Git,git,GIT*,dc_git,BOOLEAN,DA2:DA500,,Boolean indicating if,c27ba0
+,doctorsconsultation,TRUE,eye,Eye,eye,EYE*,dc_eye,BOOLEAN,DB2:DB500,,Boolean indicating if eye health is satisfactory,c27ba0
+,doctorsconsultation,TRUE,derm,Derm,derm,DERM*,dc_derm,BOOLEAN,DC2:DC500,,Boolean indicating if dermatological health is satisfactory,c27ba0
+,doctorsconsultation,TRUE,others,Others,others,DC OTHERS*,dc_others,TEXT,DD2:DD500,,Details of other relevant health assessments,c27ba0
+,doctorsconsultation,FALSE,consultation_notes,ConsultationNotes,consultationNotes,Consultation Notes,dc_consultation_notes,TEXT,DE2:DE500,,General notes from the consultation,c27ba0
+,doctorsconsultation,FALSE,diagnosis,Diagnosis,diagnosis,Diagnosis,dc_diagnosis,TEXT,DF2:DF500,,Diagnosis provided during consultation,c27ba0
+,doctorsconsultation,FALSE,treatment,Treatment,treatment,Treatment,dc_treatment,TEXT,DG2:DG500,,Treatment plan or recommendations,c27ba0
+,doctorsconsultation,TRUE,referral_needed,ReferralNeeded,referralNeeded,Referral Needed?*,dc_referral_needed,BOOLEAN,DH2:DH500,,Boolean indicating if a referral is needed,c27ba0
+,doctorsconsultation,FALSE,referral_loc,ReferralLoc,referralLoc,Referral Location,dc_referral_loc,TEXT,DI2:DI500,,"Location or details for the referral, if needed",c27ba0
+,doctorsconsultation,FALSE,remarks,Remarks,remarks,Remarks (anything that doesn't fit),dc_remarks,TEXT,DJ2:DJ500,,Additional remarks or comments,c27ba0
+Physiotherapy,physiotherapy,TRUE,pain_stiffness_day,PainStiffnessDay,painStiffnessDay,"Pain/stiffness during the day: How severe was your usual joint or muscle pain and/or stiffness overall during the day in the last 2 weeks? (0,1,2,3,4,5)*",p_pain_stiffness_day,INTEGER,DK2:DK500,"0,1,2,3,4,5 (,1,2,3,4,5)",,999999
+,physiotherapy,TRUE,pain_stiffness_night,PainStiffnessNight,painStiffnessNight,"Pain/stiffness during the night: How severe was your usual joint or muscle pain and/or stiffness overall during the night in the last 2 weeks? (0,1,2,3,4,5)*",p_pain_stiffness_night,INTEGER,DL2:DL501,"0,1,2,3,4,5",,999999
+,physiotherapy,TRUE,symptoms_interfere_tasks,SymptomsInterfereTasks,symptomsInterfereTasks,"How much has your symptoms interfered with your ability to walk or do everyday tasks like cooking, cleaning or dressing in the last 2 weeks? (Never,Rarely,Sometimes,Often,Always)*",p_symptoms_interfere_tasks,TEXT,DM2:DM501,"Never,Rarely,Sometimes,Often,Always",,999999
+,physiotherapy,TRUE,symptoms_change,SymptomsChange,symptomsChange,"Have your symptoms improved, worsened, or stayed the same over the last 2 weeks? (Improved,Worsened,Stayed the same)*",p_symptoms_change,TEXT,DN2:DN501,"Improved,Worsened,Stayed the same",,999999
+,physiotherapy,TRUE,symptoms_need_help,SymptomsNeedHelp,symptomsNeedHelp,"How often have you needed help from others (including family, friends or carers) because of your joint or muscle symptoms in the last 2 weeks? (Never,Rarely,Sometimes,Often,Always)*",p_symptoms_need_help,TEXT,DO2:DO501,"Never,Rarely,Sometimes,Often,Always",,999999
+,physiotherapy,TRUE,trouble_sleep_symptoms,TroubleSleepSymptoms,troubleSleepSymptoms,"How often have you had trouble with either falling asleep or staying asleep because of your joint or muscle symptoms in the last 2 weeks? (Never,Rarely,Sometimes,Often,Always)*",p_trouble_sleep_symptoms,TEXT,DP2:DP501,"Never,Rarely,Sometimes,Often,Always",,999999
+,physiotherapy,TRUE,how_much_fatigue,HowMuchFatigue,howMuchFatigue,"How much fatigue or low energy have you felt in the last 2 weeks? (0,1,2,3,4,5)*",p_how_much_fatigue,INTEGER,DQ2:DQ501,"0,1,2,3,4,5",,999999
+,physiotherapy,TRUE,anxious_low_mood,AnxiousLowMood,anxiousLowMood,"How much have you felt anxious or low in your mood because of your joint or muscle symptoms in the last 2 weeks? (0,1,2,3,4,5)*",p_anxious_low_mood,INTEGER,DR2:DR501,"0,1,2,3,4,5",,999999
+,physiotherapy,TRUE,medication_manage_symptoms,MedicationManageSymptoms,medicationManageSymptoms,"Have you used any medication to manage your symptoms in the last 2 weeks? If yes, how often? (Never,Rarely,Sometimes,Often,Always)*",p_medication_manage_symptoms,TEXT,DS2:DS501,"Never,Rarely,Sometimes,Often,Always",,999999
