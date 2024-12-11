@@ -44,6 +44,12 @@ Cron Job:
 2. Periodically check the run logs to ensure that the backups are working
 3. You can also make sure the webserver is running in advance.
 
+Importing CSV to Database (System is down):
+1. Make sure the database info in columns.py is correct, and backend, frontend and database container is up.
+2. Copy the latest backup csv from /cron/backups to /merger, and rename it to merged_output.csv
+3. Make sure to clear any existing database data on the current machine. (Use TRUNCATE in PgAdmin)
+4. Navigate to /importer and run `python importer.py`
+
 Converting DB to Data Sheet: (System is down)
 1. Run the Initialiser.py script, which pulls the latest backup csv from /cron/backups, and converts it to DataSheet.xlsx. 
 2. Place the DataSheet.xlsx in the /server/uploads folder for the stations to use.
@@ -61,14 +67,6 @@ TRUNCATE TABLE admin CASCADE;
 ```
 4. Run Importer.py to import the merged_output.csv file into the database.
 
-### To Do:
-- Test backup_script.bat works on another machine
-- Make script work from another machine over a network
-- Merger: Gets uploaded DataSheet.xlsx files from /server/uploads, merges them and saves to /merger/merged folder
-- Importer: Gets merged DataSheet.xlsx files from /merger/merged, imports them into the database
-
-- BUG: Type coercion for columns after concatenation in merger.py causes numeric values to become floats. doesn't seem to affect ability to import yett
- 
 ### CAUTION
 - In order to prevent accidentally running the script and resetting the database, the script will only work if the existing tables are cleared.
 - To clear the database, enter the Query Editor in pgAdmin and run the following SQL command manually:
